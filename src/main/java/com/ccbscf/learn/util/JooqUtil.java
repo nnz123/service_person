@@ -14,6 +14,8 @@ public class JooqUtil {
     private static String password="lzq520WW";
     public static DSLContext getContext()  {
         try {
+
+
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
