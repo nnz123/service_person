@@ -5,15 +5,19 @@ import com.ccbscf.learn.util.JooqUtil;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.types.UInteger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.ccbscf.learn.Staff.STAFF;
 
+@Component
 public class StaffDao {
-    private static DSLContext context = JooqUtil.getContext();
+    @Autowired
+    private  DSLContext context;
 
     /**
      * 插入一条数据
@@ -21,8 +25,9 @@ public class StaffDao {
      * @param staff
      * @return 插入数量
      */
-    public int addStaff(Staff staff) {
-        return context.insertInto(STAFF)
+    @Transactional(rollbackFor = Exception.class)
+    public int addStaff(Staff staff) throws Exception {
+        int res = context.insertInto(STAFF)
                 .set(STAFF.NAME, staff.getName())
                 .set(STAFF.GENDER, staff.getGender())
                 .set(STAFF.STATUS, staff.getStatus())
@@ -35,6 +40,11 @@ public class StaffDao {
                 .set(STAFF.DELETE_BY, staff.getDeleteBy())
                 .set(STAFF.DELETE_AT, staff.getDeleteAt())
                 .execute();
+        if(1==1){
+            throw new Exception();
+        }
+
+        return res;
     }
 
     /**
